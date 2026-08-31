@@ -204,7 +204,12 @@ class ContextProvider(ABC):
         if self.mode == ContextMode.default:
             return self._default_tools()
         if self.mode == ContextMode.tools:
-            return self._all_tools()
+            # mode=tools exposes raw tools; namespace by provider id to avoid collisions
+            try:
+                return self._all_tools(tool_name_prefix=self.id)
+            except TypeError:
+                # Backward compat: custom provider doesn't accept tool_name_prefix
+                return self._all_tools()
         return [self._query_tool()]
 
     # ------------------------------------------------------------------
@@ -410,7 +415,8 @@ class ContextProvider(ABC):
 
         return _update
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+        # Base returns query tool which is already namespaced as query_<id>
         return [self._query_tool()]
 
 

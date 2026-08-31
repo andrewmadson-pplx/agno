@@ -178,11 +178,13 @@ class SlackContextProvider(ContextProvider):
         )
         return update_tool
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
         # mode=tools is static: the provider cannot know whether a future
         # tool call will carry Slack interface metadata. Expose the
         # bot-token-compatible read surface so terminal runs never see the
         # action-token-only search_workspace tool.
+        if tool_name_prefix:
+            return [self._build_bot_read_tools(name=tool_name_prefix, prefix_tools_with_name=True)]
         return [self._ensure_bot_read_tools()]
 
     # ------------------------------------------------------------------
@@ -212,8 +214,6 @@ class SlackContextProvider(ContextProvider):
     # ------------------------------------------------------------------
 
     def _ensure_bot_read_tools(self) -> SlackTools:
-        if self.mode == ContextMode.tools:
-            return self._build_bot_read_tools(name=self.id, prefix_tools_with_name=True)
         if self._bot_read_tools is None:
             self._bot_read_tools = self._build_bot_read_tools()
         return self._bot_read_tools

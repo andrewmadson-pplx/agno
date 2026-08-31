@@ -113,7 +113,9 @@ class WorkspaceContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return [self._query_tool()]
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+        if tool_name_prefix:
+            return [self._build_workspace_tools(name=tool_name_prefix, prefix_tools_with_name=True)]
         return [self._build_workspace_tools()]
 
     # ------------------------------------------------------------------
@@ -140,18 +142,7 @@ class WorkspaceContextProvider(ContextProvider):
             markdown=True,
         )
 
-    def _build_workspace_tools(self) -> Workspace:
-        if self.mode == ContextMode.tools:
-            return Workspace(
-                root=self.root,
-                allowed=Workspace.READ_TOOLS,
-                exclude_patterns=list(self.exclude_patterns),
-                allow_paths=list(self.allow_paths),
-                max_file_lines=self.max_file_lines,
-                max_file_length=self.max_file_length,
-                name=self.id,
-                prefix_tools_with_name=True,
-            )
+    def _build_workspace_tools(self, **kwargs) -> Workspace:
         return Workspace(
             root=self.root,
             allowed=Workspace.READ_TOOLS,
@@ -159,6 +150,7 @@ class WorkspaceContextProvider(ContextProvider):
             allow_paths=list(self.allow_paths),
             max_file_lines=self.max_file_lines,
             max_file_length=self.max_file_length,
+            **kwargs,
         )
 
 

@@ -209,11 +209,13 @@ class WikiContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return self._read_write_tools()
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
         # mode=tools is read-only on purpose. The default surface
         # already gives two distinct tools (query_<id> / update_<id>);
         # collapsing both into a flat Workspace tool list would expose
         # raw write tools without the commit hook ever firing.
+        if tool_name_prefix:
+            return [self._build_read_tools(name=tool_name_prefix, prefix_tools_with_name=True)]
         return [self._build_read_tools()]
 
     # ------------------------------------------------------------------
@@ -319,17 +321,11 @@ class WikiContextProvider(ContextProvider):
             return text
         return text + "\n\n" + WIKI_WEB_INGEST_INSTRUCTIONS
 
-    def _build_read_tools(self) -> Workspace:
-        if self.mode == ContextMode.tools:
-            return Workspace(
-                root=self.backend.path,
-                allowed=Workspace.READ_TOOLS,
-                name=self.id,
-                prefix_tools_with_name=True,
-            )
+    def _build_read_tools(self, **kwargs) -> Workspace:
         return Workspace(
             root=self.backend.path,
             allowed=Workspace.READ_TOOLS,
+            **kwargs,
         )
 
     def _build_write_tools(self) -> Workspace:

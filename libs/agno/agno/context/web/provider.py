@@ -96,10 +96,8 @@ class WebContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return [self._query_tool()]
 
-    def _all_tools(self) -> list:
-        # Prefix tool names with provider id to avoid collisions when
-        # multiple web providers expose tools directly (mode=tools).
-        return self.backend.get_tools(tool_name_prefix=self.id)
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+        return self.backend.get_tools(tool_name_prefix=tool_name_prefix)
 
     # ------------------------------------------------------------------
     # Sub-agent — built lazily for agent mode and programmatic query()

@@ -183,12 +183,12 @@ class GoogleCalendarContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return self._read_write_tools()
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+        if tool_name_prefix:
+            return [self._build_read_toolkit(name=tool_name_prefix, prefix_tools_with_name=True)]
         return [self._ensure_read_toolkit()]
 
     def _ensure_read_toolkit(self) -> GoogleCalendarTools:
-        if self.mode == ContextMode.tools:
-            return self._build_read_toolkit(name=self.id, prefix_tools_with_name=True)
         if self._read_toolkit is None:
             self._read_toolkit = self._build_read_toolkit()
         return self._read_toolkit

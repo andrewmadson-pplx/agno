@@ -93,13 +93,13 @@ class FilesystemContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return [self._query_tool()]
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
         return [
             _build_file_tools(
                 self.root,
                 exclude_patterns=self.exclude_patterns,
-                name=self.id,
-                prefix_tools_with_name=True,
+                name=tool_name_prefix,
+                prefix_tools_with_name=tool_name_prefix is not None,
             )
         ]
 

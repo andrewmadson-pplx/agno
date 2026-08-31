@@ -144,7 +144,9 @@ class GoogleDriveContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return [self._query_tool()]
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+        if tool_name_prefix:
+            return [self._build_tools(name=tool_name_prefix, prefix_tools_with_name=True)]
         return [self._ensure_tools()]
 
     # ------------------------------------------------------------------
@@ -152,8 +154,6 @@ class GoogleDriveContextProvider(ContextProvider):
     # ------------------------------------------------------------------
 
     def _ensure_tools(self) -> GoogleDriveTools:
-        if self.mode == ContextMode.tools:
-            return self._build_tools(name=self.id, prefix_tools_with_name=True)
         if self._tools is None:
             self._tools = self._build_tools()
         return self._tools

@@ -141,7 +141,7 @@ class DatabaseContextProvider(ContextProvider):
     def _default_tools(self) -> list:
         return self._read_write_tools()
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
         # mode=tools returns only the readonly SQLTools. The read/write
         # split the default sub-agent mode provides doesn't flatten into a
         # single tool list cleanly, and silent write exposure is the wrong
@@ -152,8 +152,8 @@ class DatabaseContextProvider(ContextProvider):
             SQLTools(
                 db_engine=self.readonly_engine,
                 schema=self.schema,
-                name=self.id,
-                prefix_tools_with_name=True,
+                name=tool_name_prefix,
+                prefix_tools_with_name=tool_name_prefix is not None,
             )
         ]
 

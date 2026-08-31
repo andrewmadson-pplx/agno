@@ -190,7 +190,10 @@ class MCPContextProvider(ContextProvider):
         # tool name (e.g. `search`) would otherwise collide on the caller.
         return [self._query_tool()]
 
-    def _all_tools(self) -> list:
+    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+        if tool_name_prefix:
+            # Build a fresh instance with prefix — not cached since prefix varies
+            return [self._build_tools_instance(tool_name_prefix=tool_name_prefix)]
         tools = self._tools
         if tools is None:
             # Return an unconnected toolkit — caller is expected to have
@@ -217,7 +220,7 @@ class MCPContextProvider(ContextProvider):
         n = len(self._tool_descriptions)
         return f"mcp: {self.server_name} ({n} tool{'s' if n != 1 else ''})"
 
-    def _build_tools_instance(self) -> MCPTools:
+    def _build_tools_instance(self, *, tool_name_prefix: str | None = None) -> MCPTools:
         """Construct an unconnected ``MCPTools`` for this server.
 
         The ``command``/``args`` split in the provider interface is
@@ -247,11 +250,11 @@ class MCPContextProvider(ContextProvider):
                 else:
                     kwargs["server_params"] = StreamableHTTPClientParams(url=self.url or "", headers=self.headers)
 
-        # In mode=tools, prefix tool names with provider id to avoid collisions
-        # when multiple MCP servers expose the same tool names (e.g. "search").
+        # Prefix tool names to avoid collisions when multiple MCP servers
+        # expose the same tool names (e.g. "search").
         # User can override via mcp_kwargs["tool_name_prefix"].
-        if self.mode == ContextMode.tools:
-            kwargs["tool_name_prefix"] = self.id
+        if tool_name_prefix:
+            kwargs["tool_name_prefix"] = tool_name_prefix
 
         # Escape hatch: anything accepted by ``agno.tools.mcp.MCPTools``.
         # User-provided keys override anything the provider set.
