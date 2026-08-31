@@ -417,7 +417,6 @@ class ContextProvider(ABC):
         return _update
 
     def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
-        # Base returns query tool which is already namespaced as query_<id>
         return [self._query_tool()]
 
 
