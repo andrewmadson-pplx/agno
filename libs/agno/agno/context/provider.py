@@ -35,6 +35,7 @@ on-demand `learn_context(id)` meta-tool.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import json
 import re
 import sys
@@ -205,11 +206,11 @@ class ContextProvider(ABC):
             return self._default_tools()
         if self.mode == ContextMode.tools:
             # mode=tools exposes raw tools; namespace by provider id to avoid collisions
-            try:
+            # Check signature for backward compat with custom providers that don't accept the param
+            sig = inspect.signature(self._all_tools)
+            if "tool_name_prefix" in sig.parameters:
                 return self._all_tools(tool_name_prefix=self.id)
-            except TypeError:
-                # Backward compat: custom provider doesn't accept tool_name_prefix
-                return self._all_tools()
+            return self._all_tools()
         return [self._query_tool()]
 
     # ------------------------------------------------------------------
