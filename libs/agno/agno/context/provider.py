@@ -416,7 +416,7 @@ class ContextProvider(ABC):
 
         return _update
 
-    def _all_tools(self, *, tool_name_prefix: str | None = None) -> list:
+    def _all_tools(self) -> list:
         return [self._query_tool()]
 
 
