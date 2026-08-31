@@ -22,16 +22,8 @@ Setup:
 Requires: OPENAI_API_KEY + Google Calendar credentials
 """
 
-try:
-    from agno.context.calendar import GoogleCalendarContextProvider
-except ImportError:
-    print("Google client libraries not found. Install with:")
-    print(
-        "  pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib"
-    )
-    raise SystemExit(1)
-
 from agno.agent import Agent
+from agno.context.calendar import GoogleCalendarContextProvider
 from agno.context.mode import ContextMode
 from agno.models.openai import OpenAIResponses
 
