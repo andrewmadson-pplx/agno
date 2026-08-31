@@ -22,7 +22,9 @@ from agno.context.mode import ContextMode
 from agno.context.workspace import WorkspaceContextProvider
 from agno.models.openai import OpenAIResponses
 
-# Two workspace providers pointing at different directories
+# ---------------------------------------------------------------------------
+# Create Context Providers
+# ---------------------------------------------------------------------------
 code = WorkspaceContextProvider(
     id="code",
     name="Source Code",
@@ -37,16 +39,20 @@ docs = WorkspaceContextProvider(
     mode=ContextMode.tools,
 )
 
-# Combine tools — no collision because of prefixing
+# ---------------------------------------------------------------------------
+# Create Agent
+# ---------------------------------------------------------------------------
 agent = Agent(
-    model=OpenAIResponses(id="gpt-5.4"),
+    model=OpenAIResponses(id="gpt-5.6-luna"),
     tools=[*code.get_tools(), *docs.get_tools()],
     instructions=f"{code.instructions()}\n\n{docs.instructions()}",
     markdown=True,
 )
 
+# ---------------------------------------------------------------------------
+# Run Demo
+# ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    # Show the prefixed tool names
     print("Available tools:")
     for toolkit in code.get_tools():
         for name in toolkit.functions:
