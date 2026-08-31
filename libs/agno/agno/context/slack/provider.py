@@ -218,7 +218,11 @@ class SlackContextProvider(ContextProvider):
             self._bot_read_tools = self._build_bot_read_tools()
         return self._bot_read_tools
 
-    def _build_bot_read_tools(self, **kwargs) -> SlackTools:
+    def _build_bot_read_tools(
+        self,
+        name: str | None = None,
+        prefix_tools_with_name: bool = False,
+    ) -> SlackTools:
         return SlackTools(
             token=self.token,
             user_token=self._user_token,
@@ -234,7 +238,8 @@ class SlackContextProvider(ContextProvider):
             enable_list_users=True,
             enable_get_user_info=True,
             enable_get_channel_info=True,
-            **kwargs,
+            name=name,
+            prefix_tools_with_name=prefix_tools_with_name,
         )
 
     def _ensure_assisted_read_tools(self) -> SlackTools:

@@ -142,7 +142,11 @@ class WorkspaceContextProvider(ContextProvider):
             markdown=True,
         )
 
-    def _build_workspace_tools(self, **kwargs) -> Workspace:
+    def _build_workspace_tools(
+        self,
+        name: str | None = None,
+        prefix_tools_with_name: bool = False,
+    ) -> Workspace:
         return Workspace(
             root=self.root,
             allowed=Workspace.READ_TOOLS,
@@ -150,7 +154,8 @@ class WorkspaceContextProvider(ContextProvider):
             allow_paths=list(self.allow_paths),
             max_file_lines=self.max_file_lines,
             max_file_length=self.max_file_length,
-            **kwargs,
+            name=name,
+            prefix_tools_with_name=prefix_tools_with_name,
         )
 
 

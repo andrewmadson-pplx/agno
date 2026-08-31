@@ -321,11 +321,16 @@ class WikiContextProvider(ContextProvider):
             return text
         return text + "\n\n" + WIKI_WEB_INGEST_INSTRUCTIONS
 
-    def _build_read_tools(self, **kwargs) -> Workspace:
+    def _build_read_tools(
+        self,
+        name: str | None = None,
+        prefix_tools_with_name: bool = False,
+    ) -> Workspace:
         return Workspace(
             root=self.backend.path,
             allowed=Workspace.READ_TOOLS,
-            **kwargs,
+            name=name,
+            prefix_tools_with_name=prefix_tools_with_name,
         )
 
     def _build_write_tools(self) -> Workspace:

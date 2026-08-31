@@ -229,7 +229,11 @@ class GoogleCalendarContextProvider(ContextProvider):
             )
         return self._write_agent
 
-    def _build_read_toolkit(self, **kwargs) -> GoogleCalendarTools:
+    def _build_read_toolkit(
+        self,
+        name: str | None = None,
+        prefix_tools_with_name: bool = False,
+    ) -> GoogleCalendarTools:
         return GoogleCalendarTools(
             auth=self._auth,
             service_account_path=self._sa_path,
@@ -242,7 +246,8 @@ class GoogleCalendarContextProvider(ContextProvider):
             create_event=False,
             update_event=False,
             delete_event=False,
-            **kwargs,
+            name=name,
+            prefix_tools_with_name=prefix_tools_with_name,
         )
 
     def _build_write_toolkit(self) -> GoogleCalendarTools:

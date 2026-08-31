@@ -126,7 +126,13 @@ class FilesystemContextProvider(ContextProvider):
         )
 
 
-def _build_file_tools(root: Path, *, exclude_patterns: list[str] | None = None, **kwargs) -> FileTools:
+def _build_file_tools(
+    root: Path,
+    *,
+    exclude_patterns: list[str] | None = None,
+    name: str | None = None,
+    prefix_tools_with_name: bool = False,
+) -> FileTools:
     return FileTools(
         base_dir=root,
         enable_save_file=False,
@@ -138,7 +144,8 @@ def _build_file_tools(root: Path, *, exclude_patterns: list[str] | None = None, 
         enable_read_file=True,
         enable_read_file_chunk=True,
         exclude_patterns=exclude_patterns,
-        **kwargs,
+        name=name,
+        prefix_tools_with_name=prefix_tools_with_name,
     )
 
 
