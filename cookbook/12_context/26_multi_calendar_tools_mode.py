@@ -73,6 +73,5 @@ if __name__ == "__main__":
         for name in toolkit.functions:
             print(f"  - {name}")
 
-    print("\nNote: This example requires Google Calendar credentials.")
-    print("Set up service account or OAuth credentials, then run:")
-    print("  agent.print_response('Am I free Thursday afternoon?')")
+    print()
+    agent.print_response("Am I free Thursday afternoon? Check both calendars.")
