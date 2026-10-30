@@ -41,3 +41,10 @@ python cookbook/90_models/perplexity/web_search.py
 python cookbook/90_models/perplexity/knowledge.py
 ```
 
+### 7. Run Agent API examples
+
+`PerplexityResponses` uses the Perplexity Agent API, which serves models from several labs with one key.
+
+```shell
+python cookbook/90_models/perplexity/responses/basic.py
+```
