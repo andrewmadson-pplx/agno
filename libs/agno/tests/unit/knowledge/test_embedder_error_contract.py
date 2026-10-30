@@ -24,6 +24,7 @@ EMBEDDERS = [
     ("agno.knowledge.embedder.cohere", "CohereEmbedder", {"api_key": "test"}),
     ("agno.knowledge.embedder.mistral", "MistralEmbedder", {"api_key": "test"}),
     ("agno.knowledge.embedder.jina", "JinaEmbedder", {"api_key": "test"}),
+    ("agno.knowledge.embedder.perplexity", "PerplexityEmbedder", {"api_key": "test"}),
     ("agno.knowledge.embedder.voyageai", "VoyageAIEmbedder", {"api_key": "test"}),
     ("agno.knowledge.embedder.google", "GeminiEmbedder", {"api_key": "test"}),
     ("agno.knowledge.embedder.ollama", "OllamaEmbedder", {}),
