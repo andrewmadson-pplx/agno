@@ -34,3 +34,8 @@ async def test_async_batch(embedder):
     assert len(embeddings) == len(texts)
     assert all(len(e) == embedder.dimensions for e in embeddings)
     assert len(usage) == len(texts)
+
+
+def test_v2_model_with_document_input_type():
+    embedder = PerplexityEmbedder(id="pplx-embed-v2-context-0.6b", dimensions=1024, input_type="document")
+    assert len(embedder.get_embedding("Perplexity Embeddings API")) == 1024

@@ -38,8 +38,17 @@ def test_get_embedding_and_usage_sends_int8_request():
         "input": ["hello"],
         "dimensions": 256,
         "encoding_format": "base64_int8",
+        "input_type": "query",
     }
     assert post.call_args.kwargs["headers"]["Authorization"] == "Bearer test"
+
+
+def test_document_input_type_for_v2_model():
+    embedder = PerplexityEmbedder(
+        api_key="test", id="pplx-embed-v2-context-0.6b", dimensions=1024, input_type="document"
+    )
+
+    assert embedder._payload(["chunk"])["input_type"] == "document"
 
 
 def test_missing_api_key_raises_embedding_error():

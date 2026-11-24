@@ -32,6 +32,7 @@ def decode_int8_embedding(encoded: str) -> List[float]:
 class PerplexityEmbedder(Embedder):
     id: str = "pplx-embed-v1-4b"
     dimensions: int = 2560
+    input_type: Optional[str] = "query"
     api_key: Optional[str] = getenv("PERPLEXITY_API_KEY")
     base_url: str = "https://api.perplexity.ai/v1/embeddings"
     headers: Optional[Dict[str, str]] = None
@@ -56,6 +57,8 @@ class PerplexityEmbedder(Embedder):
             "dimensions": self.dimensions,
             "encoding_format": "base64_int8",
         }
+        if self.input_type:
+            data["input_type"] = self.input_type
         if self.request_params:
             data.update(self.request_params)
         return data
